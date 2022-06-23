@@ -1,0 +1,108 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:8080'
+info:
+  description: >-
+    :
+  version: 1.0.0
+  title: Swagger Billing
+  contact:
+    email: a@mail.com
+
+tags:
+  - name: user
+    description: Operations about user
+    externalDocs:
+      description: Find out more about our store
+      url: url
+  - name: billing
+    description: Operations about billing
+    externalDocs:
+      description: produce
+      url: url
+paths:
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+            format: password
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+  /billing/process:
+    post:
+      tags:
+        - billing
+      summary: ''
+      description: ''
+      operationId: 'processBilling'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                  format: binary
+              required:
+                - fileName
+      responses:
+        '200':
+          description: "file processed correctly"
+        '400':
+          description: "Problem with CSV file"
+  /billing/donwload:
+    get:
+      tags:
+        - billing
+      summary: ''
+      description: ''
+      operationId: 'downloadBill'
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: "download bill pdf file"
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Bill not found
